@@ -1,91 +1,102 @@
-import React from 'react'
-import { View, StyleSheet, Image } from 'react-native'
-import BottomNavigation, {
-  IconTab,
-  Badge
-} from 'react-native-material-bottom-navigation'
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useColorScheme } from 'react-native';
+import { ThemeProvider } from '@rneui/themed';
+import theme from './src/styles/theme';
 
-import Icon from '@expo/vector-icons/MaterialCommunityIcons'
+import Alert from './src/pages/alert';
+import Home from './src/pages/home';
+import Apiary from './src/pages/apiary';
+import Beehive from './src/pages/beehive';
+import Management from './src/pages/management';
+import NewUserForm from './src/pages/user/NewUserForm';
+
+const Tab = createBottomTabNavigator();
+
+const App = () => {
+    const deviceTheme = useColorScheme();
+    const themeSchema = theme.light;
+
+    return (
+        <ThemeProvider theme={{ themeSchema }}>
+            <NavigationContainer>
+                <Tab.Navigator
+                    initialRouteName="Home"
+                    screenOptions={{
+                        tabBarActiveTintColor: '#e91e63',
+                    }}
+                >
+                    <Tab.Screen
+                        name="Apiary"
+                        component={Apiary}
+                        options={{
+                            tabBarLabel: 'Apiary',
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="beehive-outline" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Beehive"
+                        component={Beehive}
+                        options={{
+                            tabBarLabel: 'Beehive',
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="bee-flower" color={color} size={size} />
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="Home"
+                        component={Home}
+                        options={{
+                            tabBarLabel: 'Home',
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="home" color={color} size={size} />
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="Management"
+                        component={Management}
+                        options={{
+                            tabBarLabel: 'Management',
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="receipt" color={color} size={size} />
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="Alert"
+                        component={Alert}
+                        options={{
+                            tabBarLabel: 'Alert',
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="alert-circle-outline" color={color} size={size} />
+                            ),
+                        }}
+                    />
 
 
-export default class App extends React.Component {
-    state = {
-        activeTab: 'alertas'
-    }
-
-    tabs = [
-        {
-            key: 'alertas',
-            label: 'Alertas',
-            barColor: '#388E3C',
-            pressColor: 'rgba(255, 255, 255, 0.16)',
-            icon: 'alert'
-        },
-        {
-            key: 'manejos',
-            label: 'Manejos',
-            barColor: '#00695C',
-            pressColor: 'rgba(255, 255, 255, 0.16)',
-            icon: 'receipt'
-        },
-        {
-            key: 'Apiários',
-            label: 'apiarios',
-            barColor: '#6A1B9A',
-            pressColor: 'rgba(255, 255, 255, 0.16)',
-            icon: 'archive'
-        },
-        {
-            key: 'colmeias',
-            label: 'Colmeias',
-            barColor: '#1565C0',
-            pressColor: 'rgba(255, 255, 255, 0.16)',
-            icon: 'nature'
-        }
-    ]
-
-    state = {
-        activeTab: this.tabs[0].key
-    }
-
-    renderIcon = icon => ({ isActive }) => (
-        <Icon size={24} color="white" name={icon} />
-    )
-
-    renderTab = ({ tab, isActive }) => (
-        <IconTab
-            isActive={isActive}
-            showBadge={tab.key === 'alertas'}
-            renderBadge={() => <Badge>2</Badge>}
-            key={tab.key}
-            label={tab.label}
-            renderIcon={this.renderIcon(tab.icon)}
-        />
-    )
-
-    render() {
-        return (
-          <View style={styles.container}>
-              <View style={styles.view}>
-              
-              </View>
-              <BottomNavigation
-                  tabs={this.tabs}
-                  activeTab={this.state.activeTab}
-                  onTabPress={newTab => this.setState({ activeTab: newTab.key })}
-                  renderTab={this.renderTab}
-                  useLayoutAnimation
-              />
-          </View>
-        );
-    }
+                    <Tab.Screen
+                        name="Testes"
+                        component={NewUserForm}
+                        options={{
+                            tabBarLabel: 'Testes',
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="alert-circle-outline" color={color} size={size} />
+                            ),
+                        }}
+                    />
+                </Tab.Navigator>
+            </NavigationContainer>
+        </ThemeProvider>
+    );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, backgroundColor: 'white' 
-    },
-    view: {
-        flex: 1, justifyContent: 'flex-end' 
-    },
-});
+export default App;
